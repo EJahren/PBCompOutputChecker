@@ -1,0 +1,6 @@
+PBCompOutputChecker
+===================
+
+Given the output from a PB solver that implements the output format given by
+the PB competition, if the PB solver gives an assignment, PBCompOutputChecker
+checks that the assignment satisfies the input formula.
