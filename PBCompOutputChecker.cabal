@@ -1,0 +1,31 @@
+Name:                PBCompOutputChecker
+Version:             0.1
+Synopsis:            Checks the output of a solver in accordance with the PB competition.
+Homepage:            github.com/HaskellElephant/PBCompOutputChecker
+License:             BSD3
+License-file:        LICENSE
+Author:              Eivind Jahren
+Maintainer:          eivind.jahren@student.uib.no
+Category:            Testing
+Build-type:          Simple
+-- Extra-source-files:  
+Cabal-version:       >=1.2
+
+
+Executable PBCompOutputChecker
+  -- .hs or .lhs file containing the Main module.
+  Main-is: main.hs
+  hs-source-dirs: src
+  
+  -- Packages needed in order to build this package.
+  Build-depends: base,
+                 containers,
+                 cmdargs,
+                 parsec
+  
+  -- Modules not exported by this package.
+  -- Other-modules:       
+  
+  -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
+  -- Build-tools:         
+  
