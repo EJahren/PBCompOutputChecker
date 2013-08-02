@@ -17,10 +17,14 @@ pbCompOutputChecker = App { inputFile = def &= argPos 0 &= typ "INPUTFILE",
             outputFile = def &= argPos 1 &= typ "OUTPUTFILE"}
             &= summary "Checks that the output from the solver is correct for the input opb file"
 
+parseError f e = error ("Error while parsing" ++ f ++ ":" ++  show e)
+
+handleError f = liftM  (either (parseError f) id)
+
 main = do
   a <- cmdArgs pbCompOutputChecker 
-  Right (mf,constr) <- parseFromFile parseInput (inputFile a)
-  Right (res,ass) <- parseFromFile parseOutput (outputFile a) 
+  (mf,constr) <- handleError (inputFile a)  $ parseFromFile parseInput (inputFile a)
+  (res,ass)   <- handleError (outputFile a) $ parseFromFile parseOutput (outputFile a) 
   let assig = makeAssignment ass
   print res
   when (res == Sat || res == OptFound) $

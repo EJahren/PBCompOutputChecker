@@ -1,6 +1,7 @@
 module ParseOutput(parseOutput) where
 import Text.Parsec
 import Text.Parsec.String
+import Text.Parsec.Perm
 import Data.Char
 
 
@@ -8,18 +9,48 @@ import Types
 import ParseUtil
 
 parseOutput = do
-  skipMany comment
-  r1 <- result
-  skipMany comment
-  r2 <- if r1 == Sat || r1 == OptFound then solution else return []
-  skipMany comment
+  r <- permute (
+    combine <$$>
+      (skipMany unwanted >> result)
+      <||>
+      (skipMany unwanted >> solutionLine))
+  skipMany unwanted
   eof
-  return (r1,r2)
+  return r
+  where
+    combine r1 r2 = (r1,concat r2)
+    unwanted = comment <|> emptyLine <|> (objectiveValue >> return "")
+  
+      
 
+--parseOutput = do
+--  skipMany unwanted
+--  r1 <- result
+--  skipMany unwanted
+--  r2 <- solutionLine
+--  skipMany unwanted
+--  eof
+--  return (r1,concat r2)
+--    where
+--      combine r1 r2 = (r1,concat r2)
+--      unwanted = comment <|> emptyLine <|> (objectiveValue >> return "")
+
+solutionLine = many solution
+
+emptyLine =
+  manyTill space newline
 
 comment = do
   char 'c'
   manyTill anyToken newline
+
+objectiveValue :: Parser Integer
+objectiveValue = do
+  char 'o'
+  spaces
+  n <- number
+  spaces
+  return n
 
 result :: Parser Result
 result = do

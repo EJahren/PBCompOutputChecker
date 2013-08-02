@@ -19,12 +19,13 @@ parseInput = do
   return (mf, cs)
 
 constraint = do
+  optional spaces
   ts <- terms
-  optional space
+  optional spaces
   o  <- operator
-  optional space
+  optional spaces
   r  <- rhs
-  optional space
+  optional spaces
   char ';'
   spaces
   return (ts `o` r)
@@ -66,7 +67,7 @@ comment = do
   char '*'
   manyTill anyToken newline
 
-terms = term `sepEndBy1` space
+terms = term `sepEndBy1` spaces
 
 term :: Parser Term
 term = do
